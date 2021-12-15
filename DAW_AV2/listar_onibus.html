@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Viação Calango</title>
+    <h1>Viação Calango</h1>
+    <h2>Listar Ônibus</h2>
+    <script>
+        function buscarOnibus() {
+            let xmlHttp = new XMLHttpRequest();
+            xmlHttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    console.log("Chegou resposta: " + this.responseText)
+                    document.getElementById("msg").innerHTML = this.responseText;
+                    let obj = JSON.parse(this.responseText);
+                    for (i=0; i < obj.length; i++) {
+                        let linha = obj[i];
+                        criarLinhaTabela(linha);
+                    }
+                }
+            }
+            xmlHttp.open("GET", "http://localhost/DAW_AV2/listar_onibus.php");
+            xmlHttp.send();
+            console.log("Enviei requisição");
+        }
+        function criarLinhaTabela(pobjReturnJSON) {
+            let tr = document.createElement("tr"); 
+            let td = document.createElement("td"); 
+            let textnode = document.createTextNode(pobjReturnJSON.id);
+            td.appendChild(textnode); 
+            tr.appendChild(td); 
+
+            let td2 = document.createElement("td"); 
+            textnode = document.createTextNode(pobjReturnJSON.nome);
+            td2.appendChild(textnode);
+            tr.appendChild(td2);
+
+            let td3 = document.createElement("td");
+            textnode = document.createTextNode(pobjReturnJSON.email);
+            td3.appendChild(textnode);
+            tr.appendChild(td3);
+
+            let td4 = document.createElement("td");
+            textnode = document.createTextNode(pobjReturnJSON.cpf);
+            td4.appendChild(textnode);
+            tr.appendChild(td4);
+
+            let td5 = document.createElement("td");
+            textnode = document.createTextNode(pobjReturnJSON.matricula);
+            td5.appendChild(textnode);
+            tr.appendChild(td5);
+
+            let tr_fim = document.getElementById("ultimaLinha");
+            tr_fim.parentNode.insertBefore(tr, tr_fim);
+        }
+    </script>
+</head>
+<body>
+<input type="button" value="Listar Ônibus" onclick="buscarOnibus()">
+<br/>
+<br/>
+<table id="tab">
+    <tr>
+        <th>ID</th>
+        <th>Marca</th>
+        <th>Modelo</th>
+        <th>Qtd Assentos</th>
+        <th>Tem Banheiro</th>
+        <th>Tem Ar condicionado</th>
+        <th>Chassis</th>
+        <th>Placa</th>
+    </tr>
+    <tr id="ultimaLinha">
+        <td colspan="5"></td>
+    </tr>
+</table>
+<p id="msg"></p>
+<p id="msg2"></p>
+<table>
+
+</table>
+</body>
+</html>

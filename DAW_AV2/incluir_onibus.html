@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Viação Calango</title>
+    <h1>Viação Calango</h1>
+    
+    <script>
+        function NomeValido(pNome){
+            if (pNome == "") {
+                return false;
+            }
+            return true;
+        }
+               
+        function ValidarForm() {
+            let objForm = document.getElementById("onibus");
+            console.log("objForm: " + objForm.innerHTML);
+            let strID = document.getElementById("id").value;
+            let strMarca = document.getElementById("marca").value;
+            let strModelo = document.getElementById("modelo").value;
+            let strqtdAssentos = document.getElementById("qtdassentos").value;
+            let strtemBanheiro = document.getElementById("temBanheiro").value;
+            let strtemArCondicionado = document.getElementById("temArCondicionado").value;
+            let strChassis = document.getElementById("chassis").value;
+            let strPlaca = document.getElementById("placa").value;
+            console.log("id:" + strID + "  marca: " + strMarca + "  modelo:" + strModelo + "  qtdAssentos: " + strqtdAssentos + "  temBanheiro: " + strtemBanheiro + "  temArCondicionado: " + strtemArCondicionado + "  chassis: " + strChassis + "  placa: " + strPlaca );
+            msgErro = "";
+            if (!NomeValido(strID)) {
+                msgErro = "ID não pode ser vazio. \n";
+            }
+            
+            if (msgErro == "") {
+                EnviarForm(strID, strMarca, strModelo, strqtdAssentos,strtemBanheiro,strtemArCondicionado,strChassis,strPlaca);
+            }
+        }
+        function EnviarForm(strID, strMarca, strModelo, strqtdAssentos,strtemBanheiro,strtemArCondicionado,strChassis,strPlaca) {
+            let xmlHttp = new XMLHttpRequest();
+            xmlHttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    console.log("Chegou resposta: " + this.responseText)
+                    document.getElementById("msg").innerHTML = this.responseText;
+                }
+            }
+            xmlHttp.open("GET", "http://localhost/DAW_AV2/incluir_onibus.php?nome=" + pNome +
+            "&email=" + pEmail + "&cpf=" + pCpf + "&matricula=" + pMat);
+            xmlHttp.send();
+            console.log("Enviei requisição");
+        }
+    </script>
+</head>
+<body>
+<a href="listar_onibus.php">Listar Ônibus</a><br>
+<a href="incluir_onibus.php">Incluir Ônibus</a><br>
+
+<h1>Incluir Ônibus</h1>
+<form action="" id="onibus" >
+    ID:   <input type="text" name="id" id="id"><br>
+    Marca:   <input type="text" name="marca" id="marca"><br>
+    Modelo:   <input type="text" name="modelo" id="modelo"><br>
+    Qtde de assentos:   <input type="text" name="qtdAssentos" id="qtdAssentos"><br>
+    Tem banheiro:   <input type="text" name="temBanheiro" id="temBanheiro"><br>
+    Tem ar condicionado:   <input type="text" name="temArCondicionado" id="temArCondicionado"><br>
+    Chassis:   <input type="text" name="chassis" id="chassis"><br>
+    Placa:   <input type="text" name="placa" id="placa"><br>
+    <br/>
+    <br/>
+    <input type="button" value="enviar" onclick="ValidarForm()">
+</form>
+
+<p id="msg"></p>
+
+</body>
+</html>
